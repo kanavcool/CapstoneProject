@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="OrangeHRM_Automation_Suite" verbose="1" parallel="none">
+
+	<test name="OHRM_POM_Admin_Functionality_Tests">
+		<classes>
+			<class name="com.CapstoneProject.OHRMProject.Scenario2_OHRM" />
+		</classes>
+	</test>
+
+</suite>
