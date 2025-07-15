@@ -1,5 +1,3 @@
-// File: src/test/java/com/CapstoneProject/OHRMProject/Scenario2_OHRM.java
-
 package com.CapstoneProject.OHRMProject;
 
 import java.time.Duration;

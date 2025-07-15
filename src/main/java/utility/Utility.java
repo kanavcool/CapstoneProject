@@ -12,34 +12,38 @@ import org.openqa.selenium.WebDriver;
 
 public class Utility {
 
-	public static String captureScreenshot(WebDriver driver, String screenshotName) {
-		String destinationPath = "";
-		try {
-			TakesScreenshot ts = (TakesScreenshot) driver;
-			File source = ts.getScreenshotAs(OutputType.FILE);
+    public static String captureScreenshot(WebDriver driver, String screenshotName) {
+        String destinationPath = "";
+        try {
+            // Capture screenshot
+            TakesScreenshot ts = (TakesScreenshot) driver;
+            File source = ts.getScreenshotAs(OutputType.FILE);
 
-			String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-			String fileName = screenshotName + "_" + timestamp + ".png";
+            // Create filename with timestamp
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String fileName = screenshotName + "_" + timestamp + ".png";
 
-			File directory = new File(
-					System.getProperty("user.dir") + File.separator + "Reports" + File.separator + "Screenshots");
-			if (!directory.exists()) {
-				directory.mkdirs();
-			}
+            // ✅ Save screenshot in root-level "Screenshots" folder (no "Reports")
+            File directory = new File(System.getProperty("user.dir") + File.separator + "Screenshots");
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
 
-			destinationPath = directory.getAbsolutePath() + File.separator + fileName;
-			File destination = new File(destinationPath);
+            // Full path where screenshot will be saved
+            destinationPath = directory.getAbsolutePath() + File.separator + fileName;
+            File destination = new File(destinationPath);
 
-			FileUtils.copyFile(source, destination);
-			System.out.println("Screenshot saved: " + destinationPath);
+            // Copy file
+            FileUtils.copyFile(source, destination);
+            System.out.println("✅ Screenshot saved at: " + destinationPath);
+        } catch (IOException e) {
+            System.err.println("❌ Failed to capture screenshot: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("❌ Unexpected error while capturing screenshot: " + e.getMessage());
+            e.printStackTrace();
+        }
 
-		} catch (IOException e) {
-			System.err.println("Failed to capture screenshot: " + e.getMessage());
-			e.printStackTrace();
-		} catch (Exception e) {
-			System.err.println("An unexpected error occurred while capturing screenshot: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return destinationPath;
-	}
+        return destinationPath;
+    }
 }
