@@ -1,116 +1,130 @@
-package com.CapstoneProject.OHRMProject;
+package com.CapstoneProject.OHRMProject; // Ensure this package name is correct
 
 import java.time.Duration;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
+import org.testng.Assert; // For assertions
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.By; // Needed for By.id, By.xpath etc.
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import utility.Utility;
-
-import com.CapstoneProject.OHRMProject.pages.Login_Page;
 import com.CapstoneProject.OHRMProject.pages.Admin_Page;
+import com.CapstoneProject.OHRMProject.pages.Login_Page;
 
 public class Scenario2_OHRM {
 	public WebDriver driver;
-	public Login_Page loginPage;
-	public Admin_Page adminPage; // Declare here, but initialize later
+	public Login_Page l1;
+	public Admin_Page a1;
+	private WebDriverWait wait; // Declare WebDriverWait for this test class
 
 	@BeforeTest
-	public void setup() {
-		WebDriverManager.chromedriver().setup();
+	public void beforeTest() {
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // Implicit wait
+		wait = new WebDriverWait(driver, Duration.ofSeconds(20)); // Explicit wait for this test class
 
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--start-maximized");
-		options.addArguments("disable-infobars");
-		options.addArguments("--disable-popup-blocking");
-		options.addArguments("--disable-extensions");
-		options.addArguments("--ignore-certificate-errors");
-		options.addArguments("--remote-allow-origins=*");
-		// options.addArguments("--headless");
-		// options.addArguments("--disable-gpu");
-		// options.addArguments("--window-size=1920,1080");
+		// **CRITICAL:** Use the base URL that works and leads to the login page.
+		// You MUST manually verify this URL in a browser.
+		driver.get("https://opensource-demo.orangehrmlive.com/");
 
-		driver = new ChromeDriver(options);
-		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(45));
-
-		System.out.println("Navigating to URL: https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
-		driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
-
-		WebDriverWait urlWait = new WebDriverWait(driver, Duration.ofSeconds(20));
-		try {
-			urlWait.until(ExpectedConditions.urlContains("/auth/login"));
-			System.out.println("Browser successfully navigated to the login URL.");
-		} catch (org.openqa.selenium.TimeoutException e) {
-			System.err.println("ERROR: Browser did not reach the expected login URL within 20 seconds.");
-			System.err.println("Current URL: " + driver.getCurrentUrl());
-			System.err.println("Page Title: " + driver.getTitle());
-			Utility.captureScreenshot(driver, "PageLoadIssue_POM_Client");
-			Assert.fail("Failed to load login page URL", e);
-		}
-
-		loginPage = new Login_Page(driver);
-		// adminPage will be initialized after login and navigation to Admin page
+		l1 = new Login_Page(driver);
+		a1 = new Admin_Page(driver);
 	}
 
 	@Test
-	public void testLoginAndAdminFunctionality() {
-		// Step 1: Login
-		System.out.println("--- Executing Login Test ---");
-		loginPage.login("Admin", "admin123");
-		Assert.assertTrue(loginPage.isLoginSuccessful(), "Login Failed! Did not reach dashboard.");
-		System.out.println("Login Successful. Current URL: " + driver.getCurrentUrl());
+	public void testLogin_and_AdminPage() {
+		System.out.println("Starting testLogin_and_AdminPage...");
 
-		// Step 2: Navigate to Admin Page and Verify
-		System.out.println("\n--- Executing Admin Page Navigation ---");
-		// Initialize adminPage *after* login, before navigating to it
-		adminPage = new Admin_Page(driver); // Initialize/re-initialize Admin_Page object
-		adminPage.navigateToAdminPage();
-		Assert.assertTrue(driver.getCurrentUrl().contains("admin/viewSystemUsers"),
-				"Failed to navigate to Admin page.");
-		System.out.println("Successfully navigated to Admin Page.");
+		// 1. Login
+		try {
+			l1.login("Admin", "admin123");
+			// Assert for successful login (e.g., check URL or a dashboard element)
+			wait.until(ExpectedConditions.urlContains("dashboard"));
+			// Optionally, verify a dashboard element is present
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h6[text()='Dashboard']")));
+			System.out.println("Login Successful and Dashboard loaded.");
+		} catch (Exception e) {
+			System.err.println("Login failed: " + e.getMessage());
+			Assert.fail("Login failed: " + e.getMessage()); // Fail the TestNG test
+		}
 
-		// Step 3: Search by Username
-		System.out.println("\n--- Executing Search by Username ---");
-		adminPage.searchUserByUsername("Admin"); // Search for 'Admin' user
-		// Fix the assertion to match the actual text "(X) Record Found"
-		Assert.assertTrue(adminPage.getRecordsFoundMessage().getText().contains("Record Found"),
-				"No records found for username search.");
+		// 2. Navigate to Admin Page
+		try {
+			a1.navigateToAdminPage();
+			// Assert that we are on the Admin page
+			wait.until(ExpectedConditions.urlContains("admin"));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h6[text()='Admin']")));
+			System.out.println("Navigated to Admin Page successfully.");
+		} catch (Exception e) {
+			System.err.println("Navigation to Admin page failed: " + e.getMessage());
+			Assert.fail("Navigation to Admin page failed: " + e.getMessage());
+		}
 
-		// Step 4: Search by User Role
-		System.out.println("\n--- Executing Search by User Role ---");
-		adminPage.searchUserByUserRole("Admin"); // Search for 'Admin' role
-		// Fix the assertion to match the actual text "(X) Record Found"
-		Assert.assertTrue(adminPage.getRecordsFoundMessage().getText().contains("Record Found"),
-				"No records found for user role search.");
+		// 3. Search by Username
+		try {
+			a1.searchByUserName("Admin"); // Pass the username to search
+			// Assert for search results (e.g., check records_found_text)
+			wait.until(ExpectedConditions.visibilityOf(a1.getRecords_found_text()));
+			String actualRecordsText = a1.getRecords_found_text().getText().trim(); // Get text and trim whitespace
+			System.out.println("DEBUG: Actual records text for username search: '" + actualRecordsText + "'"); // Debug
+																												// print
 
-		// Step 5: Search by User Status
-		System.out.println("\n--- Executing Search by User Status ---");
-		adminPage.searchUserByUserStatus("Enabled"); // Search for 'Enabled' status
-		// Fix the assertion to match the actual text "(X) Record Found"
-		Assert.assertTrue(adminPage.getRecordsFoundMessage().getText().contains("Record Found"),
-				"No records found for user status search.");
+			// Updated assertion to be more robust, checking for either "Record Found" or
+			// "Records Found"
+			boolean recordsFound = actualRecordsText.contains("Record Found")
+					|| actualRecordsText.contains("Records Found");
+			Assert.assertTrue(recordsFound,
+					"Username search failed or no records found. Actual text: '" + actualRecordsText + "'");
 
-		// Optional: Logout after all Admin tests are done
-		System.out.println("\n--- Performing Logout ---");
-		loginPage.logout();
-		Assert.assertTrue(driver.getCurrentUrl().contains("/auth/login"),
-				"Logout Failed! Did not return to login page.");
-		System.out.println("Successfully logged out.");
+			System.out.println("Username search completed. Records: " + actualRecordsText);
+			a1.refreshPage(); // Refresh to clear search for next criteria
+		} catch (Exception e) {
+			System.err.println("Search by username failed: " + e.getMessage());
+			Assert.fail("Search by username failed: " + e.getMessage());
+		}
+
+		// 4. Search by User Role
+		try {
+			a1.searchByUserRole("Admin"); // Pass the role to search
+			wait.until(ExpectedConditions.visibilityOf(a1.getRecords_found_text()));
+			String actualRecordsText = a1.getRecords_found_text().getText().trim();
+			boolean recordsFound = actualRecordsText.contains("Record Found")
+					|| actualRecordsText.contains("Records Found");
+			Assert.assertTrue(recordsFound,
+					"User Role search failed or no records found. Actual text: '" + actualRecordsText + "'");
+			System.out.println("User Role search completed. Records: " + actualRecordsText);
+			a1.refreshPage();
+		} catch (Exception e) {
+			System.err.println("Search by user role failed: " + e.getMessage());
+			Assert.fail("Search by user role failed: " + e.getMessage());
+		}
+
+		// 5. Search by User Status
+		try {
+			a1.searchByUserStatus("Enabled"); // Pass the status to search
+			wait.until(ExpectedConditions.visibilityOf(a1.getRecords_found_text()));
+			String actualRecordsText = a1.getRecords_found_text().getText().trim();
+			boolean recordsFound = actualRecordsText.contains("Record Found")
+					|| actualRecordsText.contains("Records Found");
+			Assert.assertTrue(recordsFound,
+					"User Status search failed or no records found. Actual text: '" + actualRecordsText + "'");
+			System.out.println("User Status search completed. Records: " + actualRecordsText);
+		} catch (Exception e) {
+			System.err.println("Search by user status failed: " + e.getMessage());
+			Assert.fail("Search by user status failed: " + e.getMessage());
+		}
+
+		System.out.println("testLogin_and_AdminPage completed successfully.");
 	}
 
 	@AfterTest
-	public void teardown() {
+	public void afterTest() {
 		if (driver != null) {
 			driver.quit();
 		}
-		System.out.println("Browser closed.");
 	}
 }

@@ -5,9 +5,9 @@
     <classes>
       <class name="com.CapstoneProject.OHRMProject.Scenario2_OHRM">
         <methods>
-          <include name="testLoginAndAdminFunctionality"/>
-          <include name="teardown"/>
-          <include name="setup"/>
+          <include name="afterTest"/>
+          <include name="beforeTest"/>
+          <include name="testLogin_and_AdminPage"/>
         </methods>
       </class> <!-- com.CapstoneProject.OHRMProject.Scenario2_OHRM -->
     </classes>

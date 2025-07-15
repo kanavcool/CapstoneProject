@@ -2,23 +2,23 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-07-15T13:58:35 IST" name="Default suite" finished-at="2025-07-15T13:58:49 IST" duration-ms="14352">
+  <suite started-at="2025-07-16T05:05:25 IST" name="Default suite" finished-at="2025-07-16T05:05:40 IST" duration-ms="14865">
     <groups>
     </groups>
-    <test started-at="2025-07-15T13:58:35 IST" name="Default test" finished-at="2025-07-15T13:58:49 IST" duration-ms="14352">
+    <test started-at="2025-07-16T05:05:25 IST" name="Default test" finished-at="2025-07-16T05:05:40 IST" duration-ms="14865">
       <class name="com.CapstoneProject.OHRMProject.Scenario2_OHRM">
-        <test-method is-config="true" signature="setup()[pri:0, instance:com.CapstoneProject.OHRMProject.Scenario2_OHRM@58ea606c]" started-at="2025-07-15T13:58:35 IST" name="setup" finished-at="2025-07-15T13:58:39 IST" duration-ms="4321" status="PASS">
+        <test-method is-config="true" signature="beforeTest()[pri:0, instance:com.CapstoneProject.OHRMProject.Scenario2_OHRM@4e3958e7]" started-at="2025-07-16T05:05:25 IST" name="beforeTest" finished-at="2025-07-16T05:05:31 IST" duration-ms="5416" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- setup -->
-        <test-method signature="testLoginAndAdminFunctionality()[pri:0, instance:com.CapstoneProject.OHRMProject.Scenario2_OHRM@58ea606c]" started-at="2025-07-15T13:58:39 IST" name="testLoginAndAdminFunctionality" finished-at="2025-07-15T13:58:49 IST" duration-ms="9357" status="PASS">
+        </test-method> <!-- beforeTest -->
+        <test-method signature="testLogin_and_AdminPage()[pri:0, instance:com.CapstoneProject.OHRMProject.Scenario2_OHRM@4e3958e7]" started-at="2025-07-16T05:05:31 IST" name="testLogin_and_AdminPage" finished-at="2025-07-16T05:05:40 IST" duration-ms="9033" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testLoginAndAdminFunctionality -->
-        <test-method is-config="true" signature="teardown()[pri:0, instance:com.CapstoneProject.OHRMProject.Scenario2_OHRM@58ea606c]" started-at="2025-07-15T13:58:49 IST" name="teardown" finished-at="2025-07-15T13:58:49 IST" duration-ms="643" status="PASS">
+        </test-method> <!-- testLogin_and_AdminPage -->
+        <test-method is-config="true" signature="afterTest()[pri:0, instance:com.CapstoneProject.OHRMProject.Scenario2_OHRM@4e3958e7]" started-at="2025-07-16T05:05:40 IST" name="afterTest" finished-at="2025-07-16T05:05:40 IST" duration-ms="374" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- teardown -->
+        </test-method> <!-- afterTest -->
       </class> <!-- com.CapstoneProject.OHRMProject.Scenario2_OHRM -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
