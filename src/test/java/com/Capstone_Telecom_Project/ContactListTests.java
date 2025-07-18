@@ -1,4 +1,4 @@
-package contactlist;
+package com.Capstone_Telecom_Project;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
