@@ -3,13 +3,15 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.CapstoneProject.OHRMProject.Scenario2_OHRM">
+      <class name="com.Capstone_Orange_HRM.Scenario1_OHRM">
         <methods>
-          <include name="afterTest"/>
           <include name="beforeTest"/>
-          <include name="testLogin_and_AdminPage"/>
+          <include name="afterMethod"/>
+          <include name="afterTest"/>
+          <include name="beforeMethodSetup"/>
+          <include name="Ohrmlogin" invocation-numbers="0"/>
         </methods>
-      </class> <!-- com.CapstoneProject.OHRMProject.Scenario2_OHRM -->
+      </class> <!-- com.Capstone_Orange_HRM.Scenario1_OHRM -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
